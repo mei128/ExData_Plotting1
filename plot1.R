@@ -30,7 +30,7 @@ house <<- read_delim(baseDataPath, delim=";", na = "?", col_types= cols(col_date
                         col_double(), col_double(), col_double(), col_double()))
 
 house <- filter(house,Date=="2007-2-1"|Date=="2007-2-2")
-house <- mutate(house, DateTime = as.POSIXct(paste(Date,Time)))
+house <- mutate(house, datetime = as.POSIXct(paste(Date,Time)))
 
 rm("baseDataURL","baseDataZIP","baseDataPath")
 
@@ -43,8 +43,11 @@ rm("baseDataURL","baseDataZIP","baseDataPath")
 ############################################################################################
 
 png(filename = "plot1.png", width = 480, height = 480, units = "px")
+
 hist(house$Global_active_power, main = "Global Active Power",
                                 xlab = "Global Active Power (kilowatts)",
                                 col = "red")
+
 dev.off()
 
+message("Your file is ready.")

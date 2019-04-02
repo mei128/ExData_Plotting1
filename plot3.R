@@ -1,7 +1,7 @@
 #
-# plot2.R
+# plot3.R
 #
-# Time series (lines) Global Active Power
+# Time series of all 3 energy sub metterings
 
 library(readr)
 library(dplyr)
@@ -34,25 +34,35 @@ house <- mutate(house, datetime = as.POSIXct(paste(Date,Time)))
 
 rm("baseDataURL","baseDataZIP","baseDataPath")
 
-################### plot2 - Time line of Global_active_power ###############################
+################### plot3- Time line of the 3 sub metterings ###############################
 #                                                                                          #
 # 1) Set locale to English so weekdays are printed in English                              #
 # 2) Set up de PNG device (default is 480x480, but just to practice...)                    #
 # 3) Draw an empty canvas as foundation to build on                                        #
-# 4) Draw the lines with house$DateTime and house$Global_active_power as X and Y vectors   #
-# 5) Close PNG device                                                                      #
+# 4) Draw the lines with timestamp as X (3 times) and the three metterings a Y vector      #
+# 5) Draw the legend                                                                       #
+# 6) Close PNG device                                                                      #
 #                                                                                          #
 ############################################################################################
 
 Sys.setlocale("LC_ALL","English")
 
-png(filename = "plot2.png", width = 480, height = 480, units = "px")
+png(filename = "plot3.png", width = 480, height = 480, units = "px")
 
-with(house,plot(datetime,Global_active_power, xlab = "", ylab = "Global Active Power", type = "n"))
+m1 <- house$Sub_metering_1
+m2 <- house$Sub_metering_2
+m3 <- house$Sub_metering_3
+mv <- house[,6+mx]
+xv <- house$datetime
 
-lines(house$datetime,house$Global_active_power)
+plot(xv,m1, xlab = "", ylab = "Energy sub mettering", type = "n")
+
+lines(xv, m1, col="black")
+lines(xv, m2, col="red")
+lines(xv, m3, col="blue")
+
+legend("topright", legend = c("Sub_mettering_1","Sub_mettering_2","Sub_mettering_3"), lwd = c(1,1,1), col = c("black","red","blue"))
 
 dev.off()
 
 message("Your file is ready.")
-
