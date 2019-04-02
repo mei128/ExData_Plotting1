@@ -1,7 +1,7 @@
 #
-# plot1.R
+# plot4.R
 #
-# Histogram of Global Active Power
+# Quadruple chart
 
 library(readr)
 library(dplyr)
@@ -34,19 +34,56 @@ house <- mutate(house, datetime = as.POSIXct(paste(Date,Time)))
 
 rm("baseDataURL","baseDataZIP","baseDataPath")
 
-################### plot1 - Histogram of Global_active_power ###############################
+################### plot4- Quadruple Chart #################################################
 #                                                                                          #
-# 1) Set up de PNG device (default is 480x480, but just to practice...)                    #
-# 2) Draw histogram with desired parameters and labels                                     #
-# 3) Close PNG device                                                                      #
+# 1) Set locale to English so weekdays are printed in English                              #
+# 2) Set up de PNG device (default is 480x480, but just to practice...)                    #
+# 3) Use the par() function to arrange a 2x2 space                                         #
+# For each chart                                                                           #
+# 5.1) Draw an empty canvas as foundation to build on                                      #
+# 5.2) Draw the lines with X = datetime and Y = required measurment                        #
+# 5.3) Draw the legend if needed                                                           #
+# 6) Close PNG device                                                                      #
 #                                                                                          #
 ############################################################################################
 
-png(filename = "plot1.png", width = 480, height = 480, units = "px")
+Sys.setlocale("LC_ALL","English")
 
-hist(house$Global_active_power, main = "Global Active Power",
-                                xlab = "Global Active Power (kilowatts)",
-                                col = "red")
+png(filename = "plot4.png", width = 480, height = 480, units = "px")
+
+par(mfcol = c(2,2))
+
+# Upper left - Global Active Power
+
+with(house, {
+    plot(datetime,Global_active_power, xlab = "", ylab = "Global Active Power", type = "n")
+    lines(datetime,Global_active_power)
+})
+
+# Lower left - Sub metterings
+
+with(house, {
+    plot(datetime,Sub_metering_1, xlab = "", ylab = "Energy sub metering", type = "n")
+    lines(datetime,Sub_metering_1, col="black")
+    lines(datetime,Sub_metering_2, col="red")
+    lines(datetime,Sub_metering_3, col="blue")
+})
+legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lwd = c(1,1,1), col = c("black","red","blue"), bty="n")
+
+# Upper right - Voltage
+
+with(house, {
+    plot(datetime,Voltage,type = "n")
+    lines(datetime,Voltage)
+})
+
+# Lower right - Global Reactive Power
+
+with(house, {
+    plot(datetime,Global_reactive_power,type = "n")
+    lines(datetime,Global_reactive_power)
+})
+
 
 dev.off()
 

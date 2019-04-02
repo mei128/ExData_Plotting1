@@ -25,7 +25,7 @@ if (!file.exists(baseDataPath)) {
     file.remove(baseDataZIP)
 }
 
-house <<- read_delim(baseDataPath, delim=";", na = "?", col_types= cols(col_date(format = "%d/%m/%Y"),
+house <- read_delim(baseDataPath, delim=";", na = "?", col_types= cols(col_date(format = "%d/%m/%Y"),
                        col_time(format = "%H:%M:%S"), col_double(), col_double(), col_double(),
                         col_double(), col_double(), col_double(), col_double()))
 
@@ -48,9 +48,10 @@ Sys.setlocale("LC_ALL","English")
 
 png(filename = "plot2.png", width = 480, height = 480, units = "px")
 
-with(house,plot(datetime,Global_active_power, xlab = "", ylab = "Global Active Power", type = "n"))
-
-lines(house$datetime,house$Global_active_power)
+with(house, {
+    plot(datetime,Global_active_power, xlab = "", ylab = "Global Active Power", type = "n")
+    lines(datetime,Global_active_power)
+})
 
 dev.off()
 

@@ -25,7 +25,7 @@ if (!file.exists(baseDataPath)) {
     file.remove(baseDataZIP)
 }
 
-house <<- read_delim(baseDataPath, delim=";", na = "?", col_types= cols(col_date(format = "%d/%m/%Y"),
+house <- read_delim(baseDataPath, delim=";", na = "?", col_types= cols(col_date(format = "%d/%m/%Y"),
                        col_time(format = "%H:%M:%S"), col_double(), col_double(), col_double(),
                         col_double(), col_double(), col_double(), col_double()))
 
@@ -52,16 +52,17 @@ png(filename = "plot3.png", width = 480, height = 480, units = "px")
 m1 <- house$Sub_metering_1
 m2 <- house$Sub_metering_2
 m3 <- house$Sub_metering_3
-mv <- house[,6+mx]
+
 xv <- house$datetime
 
-plot(xv,m1, xlab = "", ylab = "Energy sub mettering", type = "n")
+with(house, {
+    plot(datetime,Sub_metering_1, xlab = "", ylab = "Energy sub metering", type = "n")
+    lines(datetime,Sub_metering_1, col="black")
+    lines(datetime,Sub_metering_2, col="red")
+    lines(datetime,Sub_metering_3, col="blue")
+})
 
-lines(xv, m1, col="black")
-lines(xv, m2, col="red")
-lines(xv, m3, col="blue")
-
-legend("topright", legend = c("Sub_mettering_1","Sub_mettering_2","Sub_mettering_3"), lwd = c(1,1,1), col = c("black","red","blue"))
+legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lwd = c(1,1,1), col = c("black","red","blue"))
 
 dev.off()
 
